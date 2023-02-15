@@ -6,6 +6,8 @@ public static class MapEndpoints
     {
         group.MapGetAllPractitioners();
         group.MapGetSupervisorPractitioners();
+        group.MapGetAllAppointments();
+        group.MapGetFinancialReport();
         return group;
     }
 }

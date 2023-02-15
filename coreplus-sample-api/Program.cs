@@ -8,5 +8,4 @@ var app = builder.Build();
 
 var practitionerEndpoints = app.MapGroup("/practitioners");
 practitionerEndpoints.MapPractitionerEndpoints();
-
 app.Run();
