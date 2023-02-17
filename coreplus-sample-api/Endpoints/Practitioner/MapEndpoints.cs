@@ -8,6 +8,8 @@ public static class MapEndpoints
         group.MapGetSupervisorPractitioners();
         group.MapGetAllAppointments();
         group.MapGetFinancialReport();
+        group.MapGetAppointment();
+        group.MapGetAllPractitionersSorted();
         return group;
     }
 }

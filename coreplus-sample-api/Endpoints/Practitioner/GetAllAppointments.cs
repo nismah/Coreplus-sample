@@ -8,7 +8,7 @@ public static class GetAllAppointments
     
     public static RouteGroupBuilder MapGetAllAppointments(this RouteGroupBuilder group)
     {
-        group.MapGet("/{id}", async (long id, PractitionerService practitionerService) => 
+        group.MapGet("/appointment/{id}", async (long id, PractitionerService practitionerService) => 
         {
             var practitioners = await practitionerService.GetPractitionersAppointments(id);
             return Results.Ok(practitioners);

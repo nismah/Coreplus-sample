@@ -1,4 +1,5 @@
 using Coreplus.Sample.Api.Services;
+using Microsoft.AspNetCore.Cors;
 
 namespace Coreplus.Sample.Api.Endpoints.Practitioner;
 
