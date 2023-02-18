@@ -7,6 +7,8 @@ const UsingAxios = () => {
   const [supervisorsList, setSupervisors] = useState<any[]>([])
   const [practitionersList, setPractitioners] = useState<any[]>([])
   const [financialReport, setFinancialReport] = useState<any[]>([])
+  const [appointments, setAppointments] = useState<any[]>([])
+  const [appointmentDetails, setAppointmentDetails] = useState<any[]>([])
 
   const fetchData = () => {
     axios.get("https://localhost:44348/practitioners").then(response => {
@@ -49,9 +51,28 @@ const UsingAxios = () => {
     console.log(url);
     axios.get(url).then(response => {
       setFinancialReport(response.data)
-      console.log(response);
     })
+  }
 
+  function getPractitionerAppointments(id: any)
+  {
+    let url = "https://localhost:44348/practitioners/appointment/";
+    url += id;
+    console.log(url);
+    axios.get(url).then(response => {
+      setAppointments(response.data)
+    })
+  }
+
+  
+  function getAppointmentDetails(id: any)
+  {
+    let url = "https://localhost:44348/practitioners/appointment/details/";
+    url += id;
+    console.log(url);
+    axios.get(url).then(response => {
+      setAppointmentDetails(response.data)
+    })
   }
 
   useEffect(() => {
@@ -88,7 +109,6 @@ const UsingAxios = () => {
         </ul>)}
       </div>
       <div className="pracinfo">Practitioner Report UI
-
       </div>
     </div>      
   );
