@@ -11,13 +11,20 @@
 }
 .supervisors {
   grid-area: 2 / 1 / 3 / 2;
+  overflow: auto;
   @apply border-[1px] border-gray-300 p-2;
 }
 .praclist {
   grid-area: 3 / 1 / 4 / 2;
+  overflow: auto;
   @apply border-[1px] border-gray-300 p-2;
 }
 .pracinfo {
   grid-area: 2 / 2 / 4 / 3;
+  overflow: auto;
   @apply border-[1px] border-gray-300 p-2;
+}
+.textBox{
+  width: 98px;
+  @apply border-[1px] border-gray-100 p-1;
 }

@@ -9,6 +9,8 @@ const UsingAxios = () => {
   const [financialReport, setFinancialReport] = useState<any[]>([])
   const [appointments, setAppointments] = useState<any[]>([])
   const [appointmentDetails, setAppointmentDetails] = useState<any[]>([])
+  let [inputList, setInputList] = useState([]);
+  let [appointmentViewList, setAppointmentViewList] = useState([]);
 
   const fetchData = () => {
     axios.get("https://localhost:44348/practitioners").then(response => {
@@ -23,45 +25,48 @@ const UsingAxios = () => {
     })
   }
 
-  function change()
-  {
-    console.log("change");
-  }
-
   function showDate(id: any)
   {
+    const test = document.getElementsByClassName("dateBox");
+    for (let i = 0; i < test.length; i++) {
+      test[i].setAttribute("hidden", "true");
+    }
  let p = document.getElementById(id +"date");
 
- if(p?.hasAttribute("hidden"))
- {
-  p?.removeAttribute("hidden"); 
- }
- else
- {
-  p?.setAttribute("hidden", "true");
- }
-  }
+ if (p != undefined) {
+  if(p.hidden)
+  {
+  p.hidden = false;
+}}
+}
 
   function getReport(id: any)
   {
-    let p = (document.getElementById(id) as HTMLInputElement).value
+    inputList.splice(0, inputList.length);
+    ClearAppointments();
+    let startDate = (document.getElementById(id + 'start') as HTMLInputElement).value;
+    let endDate = (document.getElementById(id + 'end') as HTMLInputElement).value
     let url = "https://localhost:44348/practitioners/getFinancialReport/";
     url += id;
-    url += "?startDate=" + p +"&endDate=" + p
-    console.log(url);
+    url += "?startDate=" + startDate +"&endDate=" + endDate;
     axios.get(url).then(response => {
       setFinancialReport(response.data)
     })
+ 
+     SetValues(financialReport, id);  
   }
 
   function getPractitionerAppointments(id: any)
   {
+    ClearAppointments();
     let url = "https://localhost:44348/practitioners/appointment/";
     url += id;
     console.log(url);
     axios.get(url).then(response => {
       setAppointments(response.data)
     })
+
+    SetAppointmentsInView(appointments, id);
   }
 
   
@@ -73,6 +78,21 @@ const UsingAxios = () => {
     axios.get(url).then(response => {
       setAppointmentDetails(response.data)
     })
+  }
+
+  function SetValues(financialReport, id)
+  {
+    setInputList(inputList.concat(<div><p id= {id + 'report'}>Revenue Per Month: {financialReport.revenuePerMonth}  Cost Per Month: {financialReport.costPerMonth}</p><button onClick ={() => getPractitionerAppointments(id)}>Get Appointments</button></div>));    
+  }
+
+  function SetAppointmentsInView(appointments, id)
+  {
+    setAppointmentViewList(appointmentViewList.concat(<div>Appointments<ul>{appointments.map(user => (<div><li>Date: {user.date}, ClientName: {user.client_name}, Duration: {user.duration}, Revenue:{user.revenue}, Cost: {user.cost}</li></div>))}</ul></div>));
+  }
+
+  function ClearAppointments()
+  {
+    appointmentViewList.splice(0, appointmentViewList.length);
   }
 
   useEffect(() => {
@@ -91,9 +111,11 @@ const UsingAxios = () => {
           {supervisorsList.map(user => (
           <div>
             <li className="button" onClick={() => showDate(user.id)} key={user.id}>{user.name}</li>
-        <div id={user.id +"date"} hidden = {true}>
-        <p>Date: </p>
-        <input type="text" id={user.id} placeholder=" mm/dd/yyyy"></input>
+        <div className="dateBox" id={user.id +"date"} hidden = {true}>
+        <p>Start Date: </p>
+        <input className="textBox" type="text" id={user.id + 'start'} placeholder="mm/dd/yyyy"></input>
+        <p>End Date: </p>
+        <input className="textBox" type="text" id={user.id + 'end'} placeholder="mm/dd/yyyy"></input>
         <button onClick={() => getReport(user.id)}>Get</button>
         </div>
         </div>
@@ -104,11 +126,26 @@ const UsingAxios = () => {
       {practitionersList.length > 0 && (
         <ul>
           {practitionersList.map(user => (
-            <li key={user.id}>{user.name}</li>
+             <div>
+             <li className="button" onClick={() => showDate(user.id)} key={user.id}>{user.name}</li>
+         <div className="dateBox" id={user.id +"date"} hidden = {true}>
+         <p>Start Date: </p>
+         <input className="textBox" type="text" id={user.id + 'start'} placeholder="mm/dd/yyyy"></input>
+         <p>End Date: </p>
+         <input className="textBox" type="text" id={user.id + 'end'} placeholder="mm/dd/yyyy"></input>
+         <button onClick={() => getReport(user.id)}>Get</button>
+         </div>
+         </div>
           ))}
         </ul>)}
       </div>
       <div className="pracinfo">Practitioner Report UI
+      <div>
+      {inputList}
+    </div>
+    <div>
+    {appointmentViewList}
+    </div>
       </div>
     </div>      
   );
